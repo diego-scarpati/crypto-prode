@@ -3,12 +3,15 @@ pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 contract Prode is Ownable {
   mapping (address => bool) public participants;
 
-  uint buyIn;
+  uint buyIn; // Should be 20 USDT
   uint score;
+  IERC20 public _stablecoinToken; // To add USDT contract address
 
   struct Match {
     // string home;
@@ -42,13 +45,12 @@ contract Prode is Ownable {
     // Algo aca para modificar el resultado del partido en especifico
   }
 
-  function enterProde(address _participant) external payable {
-    // Ver como seria el tema de usar USDT
-    // Supongo que viene por el lado de un IERC20
+  function enterProde() external {
+    require(_stablecoinToken.transferFrom(msg.sender, address(this), buyIn));
+    participants[msg.sender];
   }
 
-  function participantScore(address _participant) external view returns(uint){
-    
+  function participantScore() external view returns(uint){
     return score;
   }
 }
